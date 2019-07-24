@@ -8,7 +8,25 @@
 
 import UIKit
 
-class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate {
+    
+    
+    private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
+        if let image = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.cellImageView.image {
+            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
+            dragItem.localObject = image
+            print([dragItem])
+            return [dragItem]
+        } else {
+            return []
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return dragItems(at: indexPath)
+    }
+    
+    
     
     
     var higgins = UIImage(named: "higgins")
@@ -42,11 +60,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         didSet {
             collectionView.delegate = self
             collectionView.dataSource = self
+            collectionView.dragDelegate = self
         }
     }
     
     
-    func fetchImageFromURL() {
+   private func fetchImageFromURL() {
         
         DispatchQueue.global(qos: .userInitiated).async {
             let imageData = try? Data(contentsOf: self.imageURL!)
