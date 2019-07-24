@@ -13,6 +13,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var higgins = UIImage(named: "higgins")
     
+    var image: UIImage?
+    
+    var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -21,13 +25,17 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCollectionViewCell
         
-        cell.image = higgins
+        cell.image = image
         
         return cell
     }
     
     
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchImageFromURL()
+    }
     
     
     @IBOutlet weak var collectionView: UICollectionView! {
@@ -36,6 +44,22 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             collectionView.dataSource = self
         }
     }
+    
+    
+    func fetchImageFromURL() {
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let imageData = try? Data(contentsOf: self.imageURL!)
+            let image = UIImage(data: imageData!)
+            DispatchQueue.main.async {
+                self.image = image
+                self.collectionView.reloadData()
+            }
+            
+        }
+        
+    }
+    
     
     
     

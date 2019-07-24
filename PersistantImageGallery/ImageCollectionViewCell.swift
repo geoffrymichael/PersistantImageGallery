@@ -10,11 +10,12 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    var magnum = UIImage(named: "magnum")
+    
     
     var image: UIImage? {
         didSet {
             cellImageView.image = image
+            
         }
     }
     
