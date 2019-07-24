@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate {
+class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout {
     
     
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
@@ -22,14 +22,18 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 400, height: 400)
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         return dragItems(at: indexPath)
     }
     
     
+      
     
-    
-    var higgins = UIImage(named: "higgins")
     
     var image: UIImage?
     
