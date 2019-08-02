@@ -24,7 +24,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 200)
-        return imageSizes[indexPath.item]
+        return CGSize(width: 100, height: imageSizes[indexPath.item] * 100)
     }
     
     
@@ -40,12 +40,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var images = [UIImage]()
     
-    var imageSizes = [CGSize]()
+    var imageSizes = [CGFloat]()
     
     
     var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
     
-    var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg")]
+    var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg"), URL(string: "https://solarsystem.nasa.gov/system/content_pages/main_images/1530_49_PIA14909_768.jpg"), URL(string: "https://images.alphacoders.com/241/24151.jpg"), URL(string: "https://images2.alphacoders.com/685/685536.jpg"), URL(string: "https://images.unsplash.com/photo-1527445741084-0d3c140baf80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1166&q=80")]
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
@@ -97,7 +97,14 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             DispatchQueue.main.async {
                 self.image = image
                 self.images.append(image!)
-                self.imageSizes.append(image?.size ?? CGSize(width: 500, height: 500))
+//                self.imageSizes.append(image?.size ?? CGSize(width: 500, height: 500))
+                if let mySize = self.image?.size {
+                    let height = mySize.height
+                    let width = mySize.width
+                    
+                    let ratio = height / width
+                    self.imageSizes.append(ratio)
+                }
                 print(self.imageSizes)
                 self.collectionView.reloadData()
                 
