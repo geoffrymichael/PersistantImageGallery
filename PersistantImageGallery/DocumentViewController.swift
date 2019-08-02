@@ -41,10 +41,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
     
-    var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg")]
+    var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg")]
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return images.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -54,7 +54,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
 //            cell.image = images[1]
 //        }
         
-        if images.count > 1 {
+        if images.count > indexPath.item {
             cell.image = images[indexPath.item]
         }
         
@@ -66,9 +66,11 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchImageFromURL(url: imageURLs[1]!)
-        fetchImageFromURL(url: imageURLs[0]!)
-        
+//        fetchImageFromURL(url: imageURLs[1]!)
+//        fetchImageFromURL(url: imageURLs[0]!)
+        for image in imageURLs {
+            fetchImageFromURL(url: image!)
+        }
         
         
     }
