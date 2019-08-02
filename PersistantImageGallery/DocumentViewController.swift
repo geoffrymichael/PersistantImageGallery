@@ -23,7 +23,8 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 400, height: 400)
+//        return CGSize(width: 200, height: 200)
+        return imageSizes[indexPath.item]
     }
     
     
@@ -38,6 +39,9 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var image: UIImage?
     
     var images = [UIImage]()
+    
+    var imageSizes = [CGSize]()
+    
     
     var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
     
@@ -93,8 +97,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             DispatchQueue.main.async {
                 self.image = image
                 self.images.append(image!)
+                self.imageSizes.append(image?.size ?? CGSize(width: 500, height: 500))
+                print(self.imageSizes)
                 self.collectionView.reloadData()
-                print(self.images)
+                
             }
             
         }
