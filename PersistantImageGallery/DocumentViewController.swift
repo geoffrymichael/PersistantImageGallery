@@ -37,17 +37,27 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var image: UIImage?
     
+    var images = [UIImage]()
+    
     var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
     
+    var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg")]
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCollectionViewCell
         
-        cell.image = image
+//        if images.count > 1 {
+//            cell.image = images[1]
+//        }
+        
+        if images.count > 1 {
+            cell.image = images[indexPath.item]
+        }
+        
         
         return cell
     }
@@ -56,7 +66,11 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchImageFromURL()
+        fetchImageFromURL(url: imageURLs[1]!)
+        fetchImageFromURL(url: imageURLs[0]!)
+        
+        
+        
     }
     
     
@@ -69,14 +83,16 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     
-   private func fetchImageFromURL() {
+    private func fetchImageFromURL(url: URL) {
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let imageData = try? Data(contentsOf: self.imageURL!)
+            let imageData = try? Data(contentsOf: url)
             let image = UIImage(data: imageData!)
             DispatchQueue.main.async {
                 self.image = image
+                self.images.append(image!)
                 self.collectionView.reloadData()
+                print(self.images)
             }
             
         }
