@@ -8,7 +8,18 @@
 
 import UIKit
 
-class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout {
+class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
+    
+    //MARK: Drop delegate setup that needs to be filled out 
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+        for item in coordinator.items {
+            print(item)
+        }
+        
+        
+    }
+    
     
     
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
@@ -85,6 +96,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             collectionView.delegate = self
             collectionView.dataSource = self
             collectionView.dragDelegate = self
+            collectionView.dropDelegate = self
         }
     }
     
