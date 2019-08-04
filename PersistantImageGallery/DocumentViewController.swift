@@ -10,7 +10,7 @@ import UIKit
 
 class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     
-    //MARK: Drop delegate setup that needs to be filled out 
+    //TODO: Drop delegate setup that needs to be filled out 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         for item in coordinator.items {
@@ -33,6 +33,8 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
+    
+    //100 width constant. And aspect ratio determined from raw image size.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 200)
         return CGSize(width: 100, height: imageSizes[indexPath.item] * 100)
@@ -49,8 +51,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var image: UIImage?
     
+    //Currently storing images after the fetchImagesFromURL pulls the data
     var images = [UIImage]()
     
+    //Currently storing image aspect ratios
     var imageSizes = [CGFloat]()
     
     
@@ -78,11 +82,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     
-    
+    //MARK: Using viewdidload here just to test things for now. Our async function to pull datas from urls is currently being called from here.
     override func viewDidLoad() {
         super.viewDidLoad()
-//        fetchImageFromURL(url: imageURLs[1]!)
-//        fetchImageFromURL(url: imageURLs[0]!)
+
         for image in imageURLs {
             fetchImageFromURL(url: image!)
         }
@@ -90,7 +93,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
-    
+    //MARK: Storyboard outlet ffor collection view
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
             collectionView.delegate = self
@@ -100,16 +103,18 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    
+    //MARK: Our main async function to pull image data from a url
     private func fetchImageFromURL(url: URL) {
         
         DispatchQueue.global(qos: .userInitiated).async {
             let imageData = try? Data(contentsOf: url)
             let image = UIImage(data: imageData!)
+            
             DispatchQueue.main.async {
                 self.image = image
                 self.images.append(image!)
-//                self.imageSizes.append(image?.size ?? CGSize(width: 500, height: 500))
+                
+                //Determining aspect ratio from image
                 if let mySize = self.image?.size {
                     let height = mySize.height
                     let width = mySize.width
@@ -117,7 +122,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                     let ratio = height / width
                     self.imageSizes.append(ratio)
                 }
-                print(self.imageSizes)
+                
                 self.collectionView.reloadData()
                 
             }
