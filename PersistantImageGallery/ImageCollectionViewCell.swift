@@ -10,7 +10,13 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    
+    var imageURL: URL? {
+        didSet {
+            print("Helllllo")
+            fetchImage()
+            
+        }
+    }
     
     var image: UIImage? {
         didSet {
@@ -19,5 +25,17 @@ class ImageCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @IBOutlet weak var cellImageView: UIImageView! 
+    @IBOutlet weak var cellImageView: UIImageView!
+    
+    func fetchImage() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let imageData = try? Data(contentsOf: self.imageURL!)
+            let fetchedImage = UIImage(data: imageData!)
+            DispatchQueue.main.async {
+                self.image = fetchedImage
+                
+            }
+        }
+    }
+    
 }

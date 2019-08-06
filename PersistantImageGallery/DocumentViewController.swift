@@ -42,7 +42,8 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     //100 width constant. And aspect ratio determined from raw image size.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 200)
-        return CGSize(width: 100, height: imageSizes[indexPath.item] * 100)
+        return CGSize(width: 100, height: 100)
+//            imageSizes[indexPath.item] * 100)
     }
     
     
@@ -68,7 +69,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg"), URL(string: "https://solarsystem.nasa.gov/system/content_pages/main_images/1530_49_PIA14909_768.jpg"), URL(string: "https://images.alphacoders.com/241/24151.jpg"), URL(string: "https://images2.alphacoders.com/685/685536.jpg"), URL(string: "https://images.unsplash.com/photo-1527445741084-0d3c140baf80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1166&q=80")]
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return images.count
+        return imageURLs.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -78,9 +79,16 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
 //            cell.image = images[1]
 //        }
         
-        if images.count > indexPath.item {
-            cell.image = images[indexPath.item]
+//        if images.count > indexPath.item {
+////            cell.image = images[indexPath.item]
+//            cell.imageURL = imageURLs[3]
+//        }
+        
+        if imageURLs.count > indexPath.item {
+            cell.imageURL = imageURLs[indexPath.item]
         }
+        
+//        cell.imageURL = imageURLs[2]
         
         
         return cell
@@ -90,10 +98,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     //MARK: Using viewdidload here just to test things for now. Our async function to pull datas from urls is currently being called from here.
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        for image in imageURLs {
-            fetchImageFromURL(url: image!)
-        }
+//
+//        for image in imageURLs {
+//            fetchImageFromURL(url: image!)
+//        }
         
         
     }
