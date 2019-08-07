@@ -26,9 +26,14 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                     print(image)
                     collectionView.reloadData()
                 }
+                
             } else {
-                let placeHolderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "placeholderCell"))
+                //TODO: Add images from seperate app(safari) into our app. Below is a placeholder.
+                imageInfo.append(ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 400))
+                collectionView.reloadData()
             }
+            
+
         }
         
         
