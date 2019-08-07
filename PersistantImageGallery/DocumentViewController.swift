@@ -20,9 +20,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         for item in coordinator.items {
             if let sourceIndexPath = item.sourceIndexPath {
-                if let image = item.dragItem.localObject {
-                    collectionView.performBatchUpdates( { imageURLs.remove(at: sourceIndexPath.item); imageURLs.insert(image as? URL, at: destinationIndexPath.item) ; collectionView.deleteItems(at: [sourceIndexPath]); collectionView.insertItems(at: [destinationIndexPath]) } )
+                if let image = item.dragItem.localObject as! ImageInfo? {
+                    collectionView.performBatchUpdates( { imageInfo.remove(at: sourceIndexPath.item); imageInfo.insert(image, at: destinationIndexPath.item) ; collectionView.deleteItems(at: [sourceIndexPath]); collectionView.insertItems(at: [destinationIndexPath]) } )
                     
+                    print(image)
                     collectionView.reloadData()
                 }
             } else {
@@ -34,18 +35,27 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
-    
-    
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
-        if let image = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.cellImageView.image {
-            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
-            dragItem.localObject = image
-            print([dragItem])
+        if let imageCell = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.imageInfo {
+            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: imageCell))
+            dragItem.localObject = imageCell
             return [dragItem]
         } else {
             return []
         }
     }
+
+    
+//    private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
+//        if let image = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.cellImageView.image {
+//            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
+//            dragItem.localObject = image
+//            print([dragItem])
+//            return [dragItem]
+//        } else {
+//            return []
+//        }
+//    }
     
     
     //100 width constant. And aspect ratio determined from raw image size.
@@ -59,17 +69,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         session.localContext = collectionView
         
-        let imageObject = imageURLs[indexPath.item]
-        
-        let itemProvidor = NSItemProvider(object: (imageObject! as NSItemProviderWriting))
-        
-        print(itemProvidor, "🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴")
-        let dragItem = UIDragItem(itemProvider: itemProvidor)
-//        return dragItems(at: indexPath)
-        dragItem.localObject = URL.self
-        print(dragItem, "🧁🧁🧁🧁🧁🧁🧁🧁🧁")
-//        dragItem.localObject = String(url: dragItem)
-        return [dragItem]
+        return dragItems(at: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -95,12 +95,15 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var imageStrings = ["https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"]
     
     
+    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100)]
+    
+    
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: URL.self)
+        return session.canLoadObjects(ofClass: ImageInfo.self)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imageURLs.count
+        return imageInfo.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -118,8 +121,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         if imageURLs.count > indexPath.item {
 //            cell.imageURL = imageURLs[indexPath.item]
             
-            cell.imageURL = imageURLs[indexPath.item]
+//            cell.imageURL = imageURLs[indexPath.item]
+            
+            cell.imageInfo = imageInfo[indexPath.item]
         }
+        
+//        cell.imageInfo = ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100)
         
 //        cell.imageURL = imageURLs[2]
         

@@ -10,12 +10,20 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
+    
+    var imageInfo: ImageInfo? {
+        didSet {
+            imageURL = URL(string: (imageInfo?.imageUrl)!)
+        }
+    }
+    
+    
     var imageURL: URL? {
         didSet {
             
             print("Helllllo")
             if imageURL != nil {
-                fetchImage(url: imageURL ?? URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")!)
+                fetchImage(url: imageURL!)
             }
             
             
