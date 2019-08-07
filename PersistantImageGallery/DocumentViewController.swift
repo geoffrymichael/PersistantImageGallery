@@ -19,8 +19,17 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         for item in coordinator.items {
-            print(item)
+            if let sourceIndexPath = item.sourceIndexPath {
+                if let image = item.dragItem.localObject {
+                    collectionView.performBatchUpdates( { imageURLs.remove(at: sourceIndexPath.item); imageURLs.insert(image as? URL, at: destinationIndexPath.item) ; collectionView.deleteItems(at: [sourceIndexPath]); collectionView.insertItems(at: [destinationIndexPath]) } )
+                    
+                    collectionView.reloadData()
+                }
+            } else {
+                let placeHolderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "placeholderCell"))
+            }
         }
+        
         
         
     }
@@ -48,10 +57,25 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        return dragItems(at: indexPath)
+        session.localContext = collectionView
+        
+        let imageObject = imageURLs[indexPath.item]
+        
+        let itemProvidor = NSItemProvider(object: (imageObject! as NSItemProviderWriting))
+        
+        print(itemProvidor, "🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴🇩🇴")
+        let dragItem = UIDragItem(itemProvider: itemProvidor)
+//        return dragItems(at: indexPath)
+        dragItem.localObject = URL.self
+        print(dragItem, "🧁🧁🧁🧁🧁🧁🧁🧁🧁")
+//        dragItem.localObject = String(url: dragItem)
+        return [dragItem]
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
+        return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
+    }
       
     
     
@@ -67,6 +91,13 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
     
     var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg"), URL(string: "https://solarsystem.nasa.gov/system/content_pages/main_images/1530_49_PIA14909_768.jpg"), URL(string: "https://images.alphacoders.com/241/24151.jpg"), URL(string: "https://images2.alphacoders.com/685/685536.jpg"), URL(string: "https://images.unsplash.com/photo-1527445741084-0d3c140baf80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1166&q=80")]
+    
+    var imageStrings = ["https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"]
+    
+    
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: URL.self)
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return imageURLs.count
@@ -85,6 +116,8 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
 //        }
         
         if imageURLs.count > indexPath.item {
+//            cell.imageURL = imageURLs[indexPath.item]
+            
             cell.imageURL = imageURLs[indexPath.item]
         }
         
@@ -96,15 +129,15 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     //MARK: Using viewdidload here just to test things for now. Our async function to pull datas from urls is currently being called from here.
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+////
+////        for image in imageURLs {
+////            fetchImageFromURL(url: image!)
+////        }
 //
-//        for image in imageURLs {
-//            fetchImageFromURL(url: image!)
-//        }
-        
-        
-    }
+//
+//    }
     
     //MARK: Storyboard outlet ffor collection view
     @IBOutlet weak var collectionView: UICollectionView! {
@@ -116,33 +149,34 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
     
-    //MARK: Our main async function to pull image data from a url
-    private func fetchImageFromURL(url: URL) {
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let imageData = try? Data(contentsOf: url)
-            let image = UIImage(data: imageData!)
-            
-            DispatchQueue.main.async {
-                self.image = image
-                self.images.append(image!)
-                
-                //Determining aspect ratio from image
-                if let mySize = self.image?.size {
-                    let height = mySize.height
-                    let width = mySize.width
-                    
-                    let ratio = height / width
-                    self.imageSizes.append(ratio)
-                }
-                
-                self.collectionView.reloadData()
-                
-            }
-            
-        }
-        
-    }
+    //MARK: Our main async function to pull image data from a url. The async function has been been moved to our collectionviewcell so this has been commented out but kept just in case
+    
+//    private func fetchImageFromURL(url: URL) {
+//
+//        DispatchQueue.global(qos: .userInitiated).async {
+//            let imageData = try? Data(contentsOf: url)
+//            let image = UIImage(data: imageData!)
+//
+//            DispatchQueue.main.async {
+//                self.image = image
+//                self.images.append(image!)
+//
+//                //Determining aspect ratio from image
+//                if let mySize = self.image?.size {
+//                    let height = mySize.height
+//                    let width = mySize.width
+//
+//                    let ratio = height / width
+//                    self.imageSizes.append(ratio)
+//                }
+//
+//                self.collectionView.reloadData()
+//
+//            }
+//
+//        }
+//
+//    }
     
     
     

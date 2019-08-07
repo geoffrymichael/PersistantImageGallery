@@ -12,8 +12,12 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     var imageURL: URL? {
         didSet {
+            
             print("Helllllo")
-            fetchImage()
+            if imageURL != nil {
+                fetchImage(url: imageURL ?? URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")!)
+            }
+            
             
         }
     }
@@ -27,12 +31,12 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var cellImageView: UIImageView!
     
-    func fetchImage() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            let imageData = try? Data(contentsOf: self.imageURL!)
+    func fetchImage(url: URL) {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let imageData = try? Data(contentsOf: url)
             let fetchedImage = UIImage(data: imageData!)
             DispatchQueue.main.async {
-                self.image = fetchedImage
+                self?.image = fetchedImage
                 
             }
         }
