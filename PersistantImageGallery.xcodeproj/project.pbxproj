@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6335A02E22F7F838000DE5FA /* ImageInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6335A02D22F7F838000DE5FA /* ImageInfo.swift */; };
-		633D157322FA6DF900A3D2BE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633D157222FA6DF900A3D2BE /* Utilities.swift */; };
 		637B3EC322E7DB87006F4191 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B3EC222E7DB87006F4191 /* AppDelegate.swift */; };
 		637B3EC522E7DB87006F4191 /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B3EC422E7DB87006F4191 /* DocumentBrowserViewController.swift */; };
 		637B3EC722E7DB87006F4191 /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637B3EC622E7DB87006F4191 /* DocumentViewController.swift */; };
@@ -21,7 +20,6 @@
 
 /* Begin PBXFileReference section */
 		6335A02D22F7F838000DE5FA /* ImageInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageInfo.swift; sourceTree = "<group>"; };
-		633D157222FA6DF900A3D2BE /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		637B3EBF22E7DB87006F4191 /* PersistantImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersistantImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		637B3EC222E7DB87006F4191 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		637B3EC422E7DB87006F4191 /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
@@ -70,7 +68,6 @@
 				637B3EC622E7DB87006F4191 /* DocumentViewController.swift */,
 				637B3ED822E7DEB3006F4191 /* ImageCollectionViewCell.swift */,
 				637B3EC822E7DB87006F4191 /* Document.swift */,
-				633D157222FA6DF900A3D2BE /* Utilities.swift */,
 				637B3ECA22E7DB87006F4191 /* Main.storyboard */,
 				637B3ECD22E7DB88006F4191 /* Assets.xcassets */,
 				637B3ECF22E7DB88006F4191 /* LaunchScreen.storyboard */,
@@ -152,7 +149,6 @@
 			files = (
 				637B3EC922E7DB87006F4191 /* Document.swift in Sources */,
 				6335A02E22F7F838000DE5FA /* ImageInfo.swift in Sources */,
-				633D157322FA6DF900A3D2BE /* Utilities.swift in Sources */,
 				637B3ED922E7DEB3006F4191 /* ImageCollectionViewCell.swift in Sources */,
 				637B3EC722E7DB87006F4191 /* DocumentViewController.swift in Sources */,
 				637B3EC522E7DB87006F4191 /* DocumentBrowserViewController.swift in Sources */,
