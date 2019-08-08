@@ -93,5 +93,34 @@
             </objects>
             <point key="canvasLocation" x="795" y="656"/>
         </scene>
+        <!--Scroll View Controller-->
+        <scene sceneID="gI2-me-usX">
+            <objects>
+                <viewController id="XXU-yP-W71" customClass="ScrollViewController" customModule="PersistantImageGallery" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tYB-JL-ufQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LTp-Ts-b2f">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ZFq-Ug-hAV" firstAttribute="trailing" secondItem="LTp-Ts-b2f" secondAttribute="trailing" id="LPX-vE-Rry"/>
+                            <constraint firstItem="ZFq-Ug-hAV" firstAttribute="bottom" secondItem="LTp-Ts-b2f" secondAttribute="bottom" id="PDW-3W-VRw"/>
+                            <constraint firstItem="LTp-Ts-b2f" firstAttribute="leading" secondItem="ZFq-Ug-hAV" secondAttribute="leading" id="Zqu-0d-czq"/>
+                            <constraint firstItem="LTp-Ts-b2f" firstAttribute="top" secondItem="ZFq-Ug-hAV" secondAttribute="top" id="zyL-3c-PwX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ZFq-Ug-hAV"/>
+                    </view>
+                    <connections>
+                        <outlet property="scrollView" destination="LTp-Ts-b2f" id="9i6-eS-aJ8"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ti2-Nf-bAi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1689" y="654"/>
+        </scene>
     </scenes>
 </document>
