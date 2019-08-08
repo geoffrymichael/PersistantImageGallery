@@ -29,8 +29,37 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 
             } else {
                 //TODO: Add images from seperate app(safari) into our app. Below is a placeholder.
-                imageInfo.append(ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 400))
-                collectionView.reloadData()
+                let placeHolderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "placeholderCell")
+                )
+                item.dragItem.itemProvider.loadObject(ofClass: URL.self) { (providor, error) in
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        let url = providor?.imageURL
+                            let imageInfo = try? Data(contentsOf: providor!)
+                            
+                            
+                            let newImage = UIImage(data: imageInfo!)
+                            let imageWidth = newImage?.size.width
+                            let imageHeight = newImage?.size.height
+                            let imageRatio: Int = Int(imageWidth! / imageHeight!)
+                            self.imageSize = imageRatio
+                        
+                        
+                        DispatchQueue.main.async {
+                            if let attributedString = providor {
+                                placeHolderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
+                                    self.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
+                                })
+                            } else {
+                                placeHolderContext.deletePlaceholder()
+                            }
+                        }
+                        
+                    }
+                    
+                    
+                }
+//                imageInfo.append(ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 400))
+//                collectionView.reloadData()
             }
             
 
@@ -66,7 +95,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     //100 width constant. And aspect ratio determined from raw image size.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 200)
-        return CGSize(width: 100, height: 100)
+        return CGSize(width: 100, height: 100 * imageInfo[indexPath.item].imageRatio!)
 //            imageSizes[indexPath.item] * 100)
     }
     
@@ -86,6 +115,8 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var image: UIImage?
     
+    var imageSize: Int?
+    
     //Currently storing images after the fetchImagesFromURL pulls the data
     var images = [UIImage]()
     
@@ -100,7 +131,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var imageStrings = ["https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"]
     
     
-    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 100), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100)]
+    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1)]
     
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
