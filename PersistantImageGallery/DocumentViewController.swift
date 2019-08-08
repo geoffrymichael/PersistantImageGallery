@@ -32,22 +32,20 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 let placeHolderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: "placeholderCell")
                 )
                 item.dragItem.itemProvider.loadObject(ofClass: URL.self) { (providor, error) in
-                    DispatchQueue.global(qos: .userInitiated).async {
+                    DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                         let url = providor?.imageURL
-                            let imageInfo = try? Data(contentsOf: providor!)
+                            let imageInfo = try? Data(contentsOf: url!)
                             
                             
                             let newImage = UIImage(data: imageInfo!)
                             let imageWidth = newImage?.size.width
                             let imageHeight = newImage?.size.height
-                            let imageRatio: Int = Int(imageWidth! / imageHeight!)
-                            self.imageSize = imageRatio
-                        
                         
                         DispatchQueue.main.async {
                             if let attributedString = providor {
+                                let imageRatio = Double(imageHeight! / imageWidth!)
                                 placeHolderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
-                                    self.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
+                                    self?.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
                                 })
                             } else {
                                 placeHolderContext.deletePlaceholder()

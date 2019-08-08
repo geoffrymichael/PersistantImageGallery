@@ -14,9 +14,9 @@ class ImageInfo: NSObject, Codable, NSItemProviderWriting, NSItemProviderReading
     
     
     var imageUrl: String?
-    var imageRatio: Int?
+    var imageRatio: Double?
     
-    init(imageUrl: String, imageRatio: Int) {
+    init(imageUrl: String, imageRatio: Double) {
         self.imageUrl = imageUrl
         self.imageRatio = imageRatio
     }
