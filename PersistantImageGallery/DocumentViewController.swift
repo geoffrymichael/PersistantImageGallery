@@ -35,15 +35,15 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                         let url = providor?.imageURL
                             let imageInfo = try? Data(contentsOf: url!)
-                            
-                            
+ 
                             let newImage = UIImage(data: imageInfo!)
-                            let imageWidth = newImage?.size.width
-                            let imageHeight = newImage?.size.height
-                        
+                        let imageWidth = newImage?.size.width ?? 100
+                            let imageHeight = newImage?.size.height ?? 100
+
                         DispatchQueue.main.async {
+                            
                             if let attributedString = providor {
-                                let imageRatio = Double(imageHeight! / imageWidth!)
+                                let imageRatio = Double(imageHeight / imageWidth)
                                 placeHolderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
                                     self?.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
                                 })
@@ -143,20 +143,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCollectionViewCell
         
-//        if images.count > 1 {
-//            cell.image = images[1]
-//        }
-        
-//        if images.count > indexPath.item {
-////            cell.image = images[indexPath.item]
-//            cell.imageURL = imageURLs[3]
-//        }
+
         
         if imageURLs.count > indexPath.item {
-//            cell.imageURL = imageURLs[indexPath.item]
-            
-//            cell.imageURL = imageURLs[indexPath.item]
-            
+
             cell.imageInfo = imageInfo[indexPath.item]
         }
         
