@@ -8,22 +8,73 @@
 
 import UIKit
 
-class ScrollViewController: UIViewController {
+class ScrollViewController: UIViewController, UIScrollViewDelegate {
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+    
+    var imageURL: URL? {
+        didSet {
+            fetchImage()
+//            image = nil
+//            if view.window != nil {     // we're on Screen!!
+//                fetchImage()
+//            }
+        }
+    }
+    
+    var image: UIImage? {
+        get {
+            return imageView.image
+        }
+        set {
+            imageView.image = newValue
+            imageView.sizeToFit()
+            scrollView?.contentSize = imageView.frame.size
+        }
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
     
     
     @IBOutlet weak var scrollView: UIScrollView! {
         didSet {
-            scrollView.backgroundColor = UIColor.blue
+            
+            scrollView.minimumZoomScale = 1/25
+            scrollView.maximumZoomScale = 1
+            scrollView.delegate = self
+            scrollView.addSubview(imageView)
+            
+        }
+    }
+    
+    var imageView = UIImageView()
+    
+    private func fetchImage() {
+        if let url = imageURL {
+             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                let urlContents = try? Data(contentsOf: url)
+                DispatchQueue.main.async {
+                    //Make sure that the image after if the image loads if it is still the same one selected.
+                    if let imageData = urlContents, url == self?.imageURL?.imageURL {
+                        self?.image = UIImage(data: imageData)
+                    }
+                }
+                
+            }
+            
         }
     }
     
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg")
+        if imageURL == nil {
+            imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
+        }
+        
+    }
 
     /*
     // MARK: - Navigation
