@@ -209,7 +209,21 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
 //
 //    }
     
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "imageZoom" {
+            var zoomUrl = String()
+            if let zoomImage = sender as? ImageCollectionViewCell {
+//                image.backgroundImage = zoomImage.image.image
+                zoomUrl = zoomImage.imageURL?.absoluteString ?? "https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
+            }
+            
+            if let zoomVC = segue.destination as? ScrollViewController {
+                zoomVC.imageURL = URL(string: zoomUrl)
+            }
+            
+            
+        }
+    }
     
     
     @IBOutlet weak var documentNameLabel: UILabel!

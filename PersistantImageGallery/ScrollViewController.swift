@@ -69,7 +69,7 @@ class ScrollViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg")
+
         if imageURL == nil {
             imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg")
         }
