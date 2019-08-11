@@ -67,6 +67,24 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
+    
+    
+    //TODO Fill out our save function to store json data. Currently we are just printing out the data to console
+    @IBAction func save(_ sender: UIBarButtonItem) {
+        
+        for image in imageInfo {
+            if let json = image.json {
+                if let jsonString = String(data: json, encoding: .utf8) {
+                    print(jsonString)
+                }
+                
+            }
+        }
+        
+        
+    }
+    
+    
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
         if let imageCell = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.imageInfo {
             let dragItem = UIDragItem(itemProvider: NSItemProvider(object: imageCell))

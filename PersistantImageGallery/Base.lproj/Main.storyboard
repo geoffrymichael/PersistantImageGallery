@@ -86,7 +86,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="5DN-ye-YPq"/>
                     </view>
-                    <navigationItem key="navigationItem" id="a7O-3h-k3g"/>
+                    <navigationItem key="navigationItem" id="a7O-3h-k3g">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="1nJ-hg-OoS">
+                            <connections>
+                                <action selector="save:" destination="fda-Ig-KZY" id="k52-Ok-nfR"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Vdj-bR-dkh" id="ego-WW-S8r"/>
                     </connections>

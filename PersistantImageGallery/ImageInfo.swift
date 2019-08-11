@@ -21,6 +21,9 @@ class ImageInfo: NSObject, Codable, NSItemProviderWriting, NSItemProviderReading
         self.imageRatio = imageRatio
     }
     
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    }
     
     static var writableTypeIdentifiersForItemProvider: [String] {
         return[(kUTTypeData) as String]
