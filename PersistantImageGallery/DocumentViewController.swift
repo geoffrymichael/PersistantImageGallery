@@ -74,9 +74,18 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         for image in imageInfo {
             if let json = image.json {
-                if let jsonString = String(data: json, encoding: .utf8) {
-                    print(jsonString)
+                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json")
+                {
+                    do {
+                        try json.write(to: url)
+                        print("saved successfully")
+                    } catch let error {
+                        print("Couldnt Save \(error)")
+                    }
+                    
+                    
                 }
+
                 
             }
         }
