@@ -73,22 +73,39 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBAction func save(_ sender: UIBarButtonItem) {
         
         for image in imageInfo {
-            if let json = image.json {
-                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json")
-                {
-                    do {
-                        try json.write(to: url)
-                        print("saved successfully")
-                    } catch let error {
-                        print("Couldnt Save \(error)")
-                    }
-                    
-                    
-                }
-
+            let json = image.loadData(withTypeIdentifier: "hat", forItemProviderCompletionHandler: { data, error in
                 
-            }
+                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+                    do {
+                        try data?.write(to: url)
+                        print(url, "🌞")
+                        print(String(data: data!, encoding: .utf8))
+                    } catch let error {
+                        print("some error \(error)")
+                    }
+                }
+                
+            })
         }
+        
+        
+//        for image in imageInfo {
+//            if let json = image.json {
+//                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json")
+//                {
+//                    do {
+//                        try json.write(to: url)
+//                        print("saved successfully")
+//                    } catch let error {
+//                        print("Couldnt Save \(error)")
+//                    }
+//
+//
+//                }
+//
+//
+//            }
+//        }
         
         
     }
@@ -257,19 +274,35 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var document: UIDocument?
     
+    
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        super.viewWillAppear(true)
         
-        // Access the document
-        document?.open(completionHandler: { (success) in
-            if success {
-                // Display the content of the document, e.g.:
-                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-            } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+            do {
+                let data = try Data(contentsOf: url)
+                
+                let myImage = try JSONDecoder().decode(ImageInfo.self, from: data)
+                print(myImage.imageUrl, "🔷")
+            } catch let error {
+                print(error)
             }
-        })
+        }
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//
+//        // Access the document
+//        document?.open(completionHandler: { (success) in
+//            if success {
+//                // Display the content of the document, e.g.:
+//                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
+//            } else {
+//                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+//            }
+//        })
+//    }
     
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
