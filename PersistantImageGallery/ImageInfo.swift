@@ -16,6 +16,17 @@ class ImageInfo: NSObject, Codable, NSItemProviderWriting, NSItemProviderReading
     var imageUrl: String?
     var imageRatio: Double?
     
+    var galleries = [GalleryInfo]()
+    
+    struct GalleryInfo: Codable {
+        let imageUrl: String?
+        let imageRatio: Double?
+    }
+    
+    init(galleries: [GalleryInfo]) {
+        self.galleries = galleries
+    }
+    
     init(imageUrl: String, imageRatio: Double) {
         self.imageUrl = imageUrl
         self.imageRatio = imageRatio

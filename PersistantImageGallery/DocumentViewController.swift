@@ -15,6 +15,8 @@ import UIKit
 
 class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     
+    
+ 
     //TODO: Drop delegate setup that needs to be filled out 
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
@@ -72,21 +74,53 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     //TODO Fill out our save function to store json data. Currently we are just printing out the data to console
     @IBAction func save(_ sender: UIBarButtonItem) {
         
+        
+        var saveArray = [ImageInfo.GalleryInfo]()
+        
         for image in imageInfo {
-            let json = image.loadData(withTypeIdentifier: "hat", forItemProviderCompletionHandler: { data, error in
-                
-                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-                    do {
-                        try data?.write(to: url)
-                        print(url, "🌞")
-                        print(String(data: data!, encoding: .utf8))
-                    } catch let error {
-                        print("some error \(error)")
-                    }
+            saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
+        }
+        
+        print(saveArray)
+        
+        if let json = try? JSONEncoder().encode(saveArray) {
+            if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+                do {
+                    try json.write(to: url)
+                    print(String(bytes: json, encoding: .utf8), "🌙")
+                } catch let error {
+                    print(error)
                 }
                 
-            })
+            }
         }
+        
+       
+        
+//        do {
+//            let json = try JSONEncoder().encode(saveArray)
+//            print(String(bytes: json, encoding: .utf8),  "🌙")
+//        } catch let error {
+//            print(error)
+//        }
+        
+        
+        
+//        for image in imageInfo {
+//            let json = image.loadData(withTypeIdentifier: "hat", forItemProviderCompletionHandler: { data, error in
+//
+//                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+//                    do {
+//                        try data?.write(to: url)
+//                        print(url, "🌞")
+//                        print(String(data: data!, encoding: .utf8))
+//                    } catch let error {
+//                        print("some error \(error)")
+//                    }
+//                }
+//
+//            })
+//        }
         
         
 //        for image in imageInfo {
@@ -173,8 +207,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     var imageStrings = ["https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"]
     
     
-    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1)]
+//    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1)]
     
+    
+    var imageInfo = [ImageInfo]()
     
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: ImageInfo.self)
@@ -281,9 +317,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
             do {
                 let data = try Data(contentsOf: url)
-                
-                let myImage = try JSONDecoder().decode(ImageInfo.self, from: data)
-                print(myImage.imageUrl, "🔷")
+
+                let myImage = try JSONDecoder().decode([ImageInfo.GalleryInfo].self, from: data)
+                for image in myImage {
+                    imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
+                }
+                print(String(data: data, encoding: .utf8), "🔷")
             } catch let error {
                 print(error)
             }
