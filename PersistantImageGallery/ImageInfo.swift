@@ -47,7 +47,7 @@ class ImageInfo: NSObject, Codable, NSItemProviderWriting, NSItemProviderReading
             let encoder = JSONEncoder()
             encoder.outputFormatting = .prettyPrinted
             let data = try encoder.encode(self)
-            let json = String(data: data, encoding: String.Encoding.utf8)
+            _ = String(data: data, encoding: String.Encoding.utf8)
             progress.completedUnitCount = 100
             completionHandler(data, nil)
         } catch {

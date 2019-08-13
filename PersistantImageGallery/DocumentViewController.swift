@@ -71,80 +71,31 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     
-    //TODO Fill out our save function to store json data. Currently we are just printing out the data to console
+    //A function to save a gallery as json data to disk. For now I am trying to keep our single custom class object beceause I belive I need to for it to remain draggable. So I have saved the actual array into a codable struct in our class. Not sure if this normal procedure, but it seems to be working. Not sure if this will cause trouble when using actual document browser. 
     @IBAction func save(_ sender: UIBarButtonItem) {
-        
-        
+    
         var saveArray = [ImageInfo.GalleryInfo]()
         
         for image in imageInfo {
             saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
         }
         
-        print(saveArray)
-        
         if let json = try? JSONEncoder().encode(saveArray) {
             if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
                 do {
                     try json.write(to: url)
-                    print(String(bytes: json, encoding: .utf8), "🌙")
+                    print(String(bytes: json, encoding: .utf8) as Any, "🌙")
                 } catch let error {
                     print(error)
                 }
                 
             }
         }
-        
-       
-        
-//        do {
-//            let json = try JSONEncoder().encode(saveArray)
-//            print(String(bytes: json, encoding: .utf8),  "🌙")
-//        } catch let error {
-//            print(error)
-//        }
-        
-        
-        
-//        for image in imageInfo {
-//            let json = image.loadData(withTypeIdentifier: "hat", forItemProviderCompletionHandler: { data, error in
-//
-//                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-//                    do {
-//                        try data?.write(to: url)
-//                        print(url, "🌞")
-//                        print(String(data: data!, encoding: .utf8))
-//                    } catch let error {
-//                        print("some error \(error)")
-//                    }
-//                }
-//
-//            })
-//        }
-        
-        
-//        for image in imageInfo {
-//            if let json = image.json {
-//                if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json")
-//                {
-//                    do {
-//                        try json.write(to: url)
-//                        print("saved successfully")
-//                    } catch let error {
-//                        print("Couldnt Save \(error)")
-//                    }
-//
-//
-//                }
-//
-//
-//            }
-//        }
-        
+
         
     }
     
-    
+    //Creating a dragItem from our ImageInfo class
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
         if let imageCell = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.imageInfo {
             let dragItem = UIDragItem(itemProvider: NSItemProvider(object: imageCell))
@@ -156,16 +107,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
-//    private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
-//        if let image = (collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell)?.cellImageView.image {
-//            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
-//            dragItem.localObject = image
-//            print([dragItem])
-//            return [dragItem]
-//        } else {
-//            return []
-//        }
-//    }
+
     
     
     //100 width constant. And aspect ratio determined from raw image size.
@@ -322,7 +264,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 for image in myImage {
                     imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
                 }
-                print(String(data: data, encoding: .utf8), "🔷")
+                print(String(data: data, encoding: .utf8) as Any, "🔷")
             } catch let error {
                 print(error)
             }
