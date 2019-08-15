@@ -17,7 +17,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
  
-    //TODO: Drop delegate setup that needs to be filled out 
+    //MARK: Drop Coordinator
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         for item in coordinator.items {
@@ -69,7 +69,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
-    
+    //TODO: Need to configure to save and load using document browser. May want to rethink my model?
     
     //A function to save a gallery as json data to disk. For now I am trying to keep our single custom class object beceause I belive I need to for it to remain draggable. So I have saved the actual array into a codable struct in our class. Not sure if this normal procedure, but it seems to be working. Not sure if this will cause trouble when using actual document browser. 
     @IBAction func save(_ sender: UIBarButtonItem) {
