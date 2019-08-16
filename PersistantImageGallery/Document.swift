@@ -10,13 +10,27 @@ import UIKit
 
 class Document: UIDocument {
     
+    var imageInfoArray: [ImageInfo.GalleryInfo]?
+    
+    var cat: String?
+    
     override func contents(forType typeName: String) throws -> Any {
         // Encode your document with an instance of NSData or NSFileWrapper
-        return Data()
+        print(imageInfoArray)
+        print(cat)
+        if let myData = try? JSONEncoder().encode(imageInfoArray.self) {
+            return myData
+        } else {
+            return Data()
+        }
+        
     }
     
     override func load(fromContents contents: Any, ofType typeName: String?) throws {
         // Load your document from contents
+        if let json = contents as? Data {
+            imageInfoArray = try? JSONDecoder().decode([ImageInfo.GalleryInfo].self, from: json)
+        } 
     }
 }
 

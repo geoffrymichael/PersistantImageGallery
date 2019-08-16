@@ -69,30 +69,73 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
+    var document: Document?
+    
     //TODO: Need to configure to save and load using document browser. May want to rethink my model?
     
     //A function to save a gallery as json data to disk. For now I am trying to keep our single custom class object beceause I belive I need to for it to remain draggable. So I have saved the actual array into a codable struct in our class. Not sure if this normal procedure, but it seems to be working. Not sure if this will cause trouble when using actual document browser. 
-    @IBAction func save(_ sender: UIBarButtonItem) {
     
-        var saveArray = [ImageInfo.GalleryInfo]()
+    var saveArray = [ImageInfo.GalleryInfo]()
+    
+    @IBAction func save(_ sender: UIBarButtonItem) {
         
+        
+    
+        
+
         for image in imageInfo {
             saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
         }
         
-        if let json = try? JSONEncoder().encode(saveArray) {
-            if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-                do {
-                    try json.write(to: url)
-                    print(String(bytes: json, encoding: .utf8) as Any, "🌙")
-                } catch let error {
-                    print(error)
-                }
-                
-            }
-        }
+        document?.imageInfoArray = saveArray
+        document?.cat = "MooCow"
+        
+            document?.updateChangeCount(.done)
+        
+        
+        print(document, "💬")
+        
+//
+//        if let json = try? JSONEncoder().encode(saveArray) {
+//            if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+//                do {
+//                    try json.write(to: url)
+//                    print(String(bytes: json, encoding: .utf8) as Any, "🌙")
+//                } catch let error {
+//                    print(error)
+//                }
+//
+//            }
+//        }
 
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        document?.open(completionHandler: { success in
+            if success {
+                print(self.document)
+            } else {
+                print("did not work")
+            }
+            
+        })
+        
+//        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+//            do {
+//                let data = try Data(contentsOf: url)
+//
+//                let myImage = try JSONDecoder().decode([ImageInfo.GalleryInfo].self, from: data)
+//                for image in myImage {
+//                    imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
+//                }
+//                print(String(data: data, encoding: .utf8) as Any, "🔷")
+//            } catch let error {
+//                print(error)
+//            }
+//        }
     }
     
     //Creating a dragItem from our ImageInfo class
@@ -107,6 +150,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        
+        
+    }
 
     
     
@@ -250,26 +299,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBOutlet weak var documentNameLabel: UILabel!
     
-    var document: UIDocument?
     
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-            do {
-                let data = try Data(contentsOf: url)
-
-                let myImage = try JSONDecoder().decode([ImageInfo.GalleryInfo].self, from: data)
-                for image in myImage {
-                    imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
-                }
-                print(String(data: data, encoding: .utf8) as Any, "🔷")
-            } catch let error {
-                print(error)
-            }
-        }
-    }
+    
+    
     
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
