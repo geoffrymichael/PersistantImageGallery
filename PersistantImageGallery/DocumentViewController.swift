@@ -103,7 +103,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         
         
-        print(document, "💬")
+       
         
 //
 //        if let json = try? JSONEncoder().encode(saveArray) {
@@ -126,12 +126,21 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         document?.open(completionHandler: { success in
             if success {
-                print(self.document, "This is a document")
+               
                 self.title = self.document?.localizedName
-                print(self.title)
+                
                 self.collectionView.performBatchUpdates({
-                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[1].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
-                    self.collectionView.insertItems(at: [IndexPath(row: 0, section: 0)])
+                    
+                    if let imageOpen = self.document?.imageInfoArray {
+                        for image in imageOpen {
+                            let indexPath = IndexPath(row: self.imageInfo.count, section: 0)
+                            self.imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
+                            self.collectionView.insertItems(at: [indexPath])
+                            
+                        }
+                    }
+//                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[1].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
+//                    self.collectionView.insertItems(at: [IndexPath(row: 0, section: 0)])
                 })
                 
                 

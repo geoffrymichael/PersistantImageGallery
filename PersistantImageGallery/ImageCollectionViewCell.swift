@@ -21,7 +21,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     var imageURL: URL? {
         didSet {
             
-            print("Helllllo")
+            
             if imageURL != nil {
                 fetchImage(url: imageURL!)
             }
