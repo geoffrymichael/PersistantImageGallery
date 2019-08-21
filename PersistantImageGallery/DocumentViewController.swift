@@ -177,15 +177,15 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-            document = Document(fileURL: url)
-            
-        }
-        
-        
-    }
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+//            document = Document(fileURL: url)
+//            
+//        }
+//        
+//        
+//    }
 
     
     

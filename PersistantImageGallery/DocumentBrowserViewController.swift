@@ -16,8 +16,19 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         
         delegate = self
         
-        allowsDocumentCreation = true
+        allowsDocumentCreation = false
         allowsPickingMultipleItems = false
+        
+        template = try? FileManager.default.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
+        ).appendingPathComponent("Untitled.json")
+        if template != nil {
+            //This derives down to a boolean and only creates the document if it is true.
+            allowsDocumentCreation = FileManager.default.createFile(atPath: template!.path, contents: Data())
+        }
         
         // Update the style of the UIDocumentBrowserViewController
         // browserUserInterfaceStyle = .dark
@@ -28,19 +39,14 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         // Do any additional setup after loading the view, typically from a nib.
     }
     
+    var template: URL?
+    
     
     // MARK: UIDocumentBrowserViewControllerDelegate
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
-        let newDocumentURL: URL? = nil
+        importHandler(template, .copy)
         
-        // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
-        // Make sure the importHandler is always called, even if the user cancels the creation request.
-        if newDocumentURL != nil {
-            importHandler(newDocumentURL, .move)
-        } else {
-            importHandler(nil, .none)
-        }
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
@@ -65,10 +71,18 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     func presentDocument(at documentURL: URL) {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let documentViewController = storyBoard.instantiateViewController(withIdentifier: "DocumentViewController") as! DocumentViewController
-        documentViewController.document = Document(fileURL: documentURL)
+        let documentVC = storyBoard.instantiateViewController(withIdentifier: "DocumentMVC")
         
-        present(documentViewController, animated: true, completion: nil)
+        //Contents is a utilities method that it is a navigation controller then the contents are returned. This allows us to get contents whether it is wrapped it navigation controller or not.
+        if let galleryImageController = documentVC.contents as? DocumentViewController {
+            galleryImageController.document = Document(fileURL: documentURL)
+        }
+        
+        
+        present(documentVC, animated: true)
+        
+        
+        
     }
 }
 
