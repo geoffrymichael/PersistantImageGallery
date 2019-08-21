@@ -89,8 +89,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         document?.imageInfoArray = saveArray
         document?.cat = "MooCow"
-        
+        if document?.imageInfoArray != nil {
             document?.updateChangeCount(.done)
+        }
+        
         
         
         print(document, "💬")
@@ -116,7 +118,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         
         document?.open(completionHandler: { success in
             if success {
-                print(self.document)
+                print(self.document, "This is a document")
+                self.title = self.document?.localizedName
+                print(self.title)
+                
             } else {
                 print("did not work")
             }
@@ -152,7 +157,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
+            document = Document(fileURL: url)
+            
+        }
         
         
     }
