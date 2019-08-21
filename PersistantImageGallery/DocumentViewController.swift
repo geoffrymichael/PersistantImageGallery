@@ -9,7 +9,7 @@
 
 
 
-
+//TODO: Bug: Images are being double saved.
 
 import UIKit
 
@@ -80,7 +80,10 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBAction func close(_ sender: Any) {
         save()
-        document?.close()
+        dismiss(animated: true, completion: {
+            self.document?.close()
+        })
+        
     }
     
     
