@@ -121,6 +121,11 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 print(self.document, "This is a document")
                 self.title = self.document?.localizedName
                 print(self.title)
+                self.collectionView.performBatchUpdates({
+                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[0].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
+                    self.collectionView.insertItems(at: [IndexPath(row: 0, section: 0)])
+                })
+                
                 
             } else {
                 print("did not work")
