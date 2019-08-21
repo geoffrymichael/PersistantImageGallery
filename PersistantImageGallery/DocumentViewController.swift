@@ -77,7 +77,15 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var saveArray = [ImageInfo.GalleryInfo]()
     
-    @IBAction func save(_ sender: UIBarButtonItem) {
+    
+    @IBAction func close(_ sender: Any) {
+        save()
+        document?.close()
+    }
+    
+    
+    
+    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
         
         
     
@@ -122,7 +130,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 self.title = self.document?.localizedName
                 print(self.title)
                 self.collectionView.performBatchUpdates({
-                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[0].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
+                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[1].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
                     self.collectionView.insertItems(at: [IndexPath(row: 0, section: 0)])
                 })
                 

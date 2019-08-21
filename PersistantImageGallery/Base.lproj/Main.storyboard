@@ -87,6 +87,11 @@
                         <viewLayoutGuide key="safeArea" id="5DN-ye-YPq"/>
                     </view>
                     <navigationItem key="navigationItem" id="a7O-3h-k3g">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="XLZ-3S-9Md">
+                            <connections>
+                                <action selector="close:" destination="fda-Ig-KZY" id="OyW-9H-VGv"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="1nJ-hg-OoS">
                             <connections>
                                 <action selector="save:" destination="fda-Ig-KZY" id="k52-Ok-nfR"/>
