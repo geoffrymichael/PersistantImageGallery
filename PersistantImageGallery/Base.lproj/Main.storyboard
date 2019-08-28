@@ -92,11 +92,6 @@
                                 <action selector="close:" destination="fda-Ig-KZY" id="OyW-9H-VGv"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="1nJ-hg-OoS">
-                            <connections>
-                                <action selector="save:" destination="fda-Ig-KZY" id="k52-Ok-nfR"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="Vdj-bR-dkh" id="ego-WW-S8r"/>

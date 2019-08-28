@@ -88,7 +88,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     
-    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
+    func save() {
         
         
     
