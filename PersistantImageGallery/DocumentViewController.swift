@@ -77,9 +77,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var saveArray = [ImageInfo.GalleryInfo]()
     
+    var thumbnail: UIImage?
     
     @IBAction func close(_ sender: Any) {
         save()
+        
+        document?.thumbnail =  self.view.snapshot   
         dismiss(animated: true, completion: {
             self.document?.close()
         })
