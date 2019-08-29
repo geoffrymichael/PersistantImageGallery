@@ -89,48 +89,30 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     func save() {
-        
-        
-    
-        
+  
 
         for image in imageInfo {
             saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
         }
         
         document?.imageInfoArray = saveArray
-        document?.cat = "MooCow"
+        
         if document?.imageInfoArray != nil {
             document?.updateChangeCount(.done)
         }
-        
-        
-        
-       
-        
-//
-//        if let json = try? JSONEncoder().encode(saveArray) {
-//            if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-//                do {
-//                    try json.write(to: url)
-//                    print(String(bytes: json, encoding: .utf8) as Any, "🌙")
-//                } catch let error {
-//                    print(error)
-//                }
-//
-//            }
-//        }
+
 
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         document?.open(completionHandler: { success in
             if success {
-               
+                
                 self.title = self.document?.localizedName
+                
                 
                 self.collectionView.performBatchUpdates({
                     
@@ -142,9 +124,12 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                             
                         }
                     }
-//                    self.imageInfo = [ImageInfo(imageUrl: self.document?.imageInfoArray?[1].imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 2)]
-//                    self.collectionView.insertItems(at: [IndexPath(row: 0, section: 0)])
+                    
                 })
+                
+                
+                
+                
                 
                 
             } else {
@@ -152,20 +137,42 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             }
             
         })
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
-//        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-//            do {
-//                let data = try Data(contentsOf: url)
+//        document?.open(completionHandler: { success in
+//            if success {
 //
-//                let myImage = try JSONDecoder().decode([ImageInfo.GalleryInfo].self, from: data)
-//                for image in myImage {
-//                    imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
-//                }
-//                print(String(data: data, encoding: .utf8) as Any, "🔷")
-//            } catch let error {
-//                print(error)
+//                self.title = self.document?.localizedName
+//
+//
+//                    self.collectionView.performBatchUpdates({
+//
+//                        if let imageOpen = self.document?.imageInfoArray {
+//                            for image in imageOpen {
+//                                let indexPath = IndexPath(row: self.imageInfo.count, section: 0)
+//                                self.imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
+//                                self.collectionView.insertItems(at: [indexPath])
+//
+//                            }
+//                        }
+//
+//                    })
+//
+//
+//
+//
+//
+//
+//            } else {
+//                print("did not work")
 //            }
-//        }
+//
+//        })
+        
+
     }
     
     //Creating a dragItem from our ImageInfo class
@@ -180,15 +187,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("Untitled.json") {
-//            document = Document(fileURL: url)
-//            
-//        }
-//        
-//        
-//    }
+
 
     
     
@@ -228,10 +227,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var imageURLs = [URL(string: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"), URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Jupiter_and_its_shrunken_Great_Red_Spot.jpg"), URL(string: "https://solarsystem.nasa.gov/system/content_pages/main_images/1530_49_PIA14909_768.jpg"), URL(string: "https://images.alphacoders.com/241/24151.jpg"), URL(string: "https://images2.alphacoders.com/685/685536.jpg"), URL(string: "https://images.unsplash.com/photo-1527445741084-0d3c140baf80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1166&q=80")]
     
-    var imageStrings = ["https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg"]
-    
-    
-//    var imageInfo = [ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 1), ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 1)]
+   
     
     
     var imageInfo = [ImageInfo]()
@@ -263,61 +259,26 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     
     
-    //MARK: Using viewdidload here just to test things for now. Our async function to pull datas from urls is currently being called from here.
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-////
-////        for image in imageURLs {
-////            fetchImageFromURL(url: image!)
-////        }
-//
-//
-//    }
     
-    //MARK: Storyboard outlet ffor collection view
+    //MARK: Storyboard outlet for collection view
     @IBOutlet weak var collectionView: UICollectionView! {
         didSet {
             collectionView.delegate = self
             collectionView.dataSource = self
             collectionView.dragDelegate = self
             collectionView.dropDelegate = self
+            
+            //This needs to be explicitely set to true to enable collection view drag on iphone
+            collectionView.dragInteractionEnabled = true
         }
     }
     
-    //MARK: Our main async function to pull image data from a url. The async function has been been moved to our collectionviewcell so this has been commented out but kept just in case
     
-//    private func fetchImageFromURL(url: URL) {
-//
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            let imageData = try? Data(contentsOf: url)
-//            let image = UIImage(data: imageData!)
-//
-//            DispatchQueue.main.async {
-//                self.image = image
-//                self.images.append(image!)
-//
-//                //Determining aspect ratio from image
-//                if let mySize = self.image?.size {
-//                    let height = mySize.height
-//                    let width = mySize.width
-//
-//                    let ratio = height / width
-//                    self.imageSizes.append(ratio)
-//                }
-//
-//                self.collectionView.reloadData()
-//
-//            }
-//
-//        }
-//
-//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "imageZoom" {
             var zoomUrl = String()
             if let zoomImage = sender as? ImageCollectionViewCell {
-//                image.backgroundImage = zoomImage.image.image
                 zoomUrl = zoomImage.imageURL?.absoluteString ?? "https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80"
             }
             
@@ -332,25 +293,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBOutlet weak var documentNameLabel: UILabel!
     
-    
-    
-    
-    
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//
-//        // Access the document
-//        document?.open(completionHandler: { (success) in
-//            if success {
-//                // Display the content of the document, e.g.:
-//                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-//            } else {
-//                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
-//            }
-//        })
-//    }
-    
+   
     @IBAction func dismissDocumentViewController() {
         dismiss(animated: true) {
             self.document?.close(completionHandler: nil)

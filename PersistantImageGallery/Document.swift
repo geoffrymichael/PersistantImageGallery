@@ -12,7 +12,7 @@ class Document: UIDocument {
     
     var imageInfoArray: [ImageInfo.GalleryInfo]?
     
-    var cat: String?
+    
     
     override func contents(forType typeName: String) throws -> Any {
         // Encode your document with an instance of NSData or NSFileWrapper
