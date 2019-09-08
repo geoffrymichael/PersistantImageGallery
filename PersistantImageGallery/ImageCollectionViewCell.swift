@@ -40,11 +40,20 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellImageView: UIImageView!
     
     func fetchImage(url: URL) {
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        cellImageView.addSubview(activityIndicator)
+        activityIndicator.frame = cellImageView.bounds
+        activityIndicator.center = cellImageView.center
+        
+        activityIndicator.startAnimating()
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            
             let imageData = try? Data(contentsOf: url)
             let fetchedImage = UIImage(data: imageData!)
             DispatchQueue.main.async {
                 self?.image = fetchedImage
+                activityIndicator.stopAnimating()
+                activityIndicator.removeFromSuperview()
                 
             }
         }

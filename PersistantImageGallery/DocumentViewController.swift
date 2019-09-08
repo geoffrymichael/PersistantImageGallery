@@ -9,7 +9,6 @@
 
 
 
-//TODO: Bug: Images are being double saved.
 
 import UIKit
 
