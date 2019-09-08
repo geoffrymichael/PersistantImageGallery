@@ -40,6 +40,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var cellImageView: UIImageView!
     
     func fetchImage(url: URL) {
+        //Activity Indicator
         let activityIndicator = UIActivityIndicatorView(style: .gray)
         cellImageView.addSubview(activityIndicator)
         activityIndicator.frame = cellImageView.bounds
