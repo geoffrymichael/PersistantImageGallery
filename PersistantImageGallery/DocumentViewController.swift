@@ -35,24 +35,27 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                 item.dragItem.itemProvider.loadObject(ofClass: URL.self) { (providor, error) in
                     DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                         let url = providor?.imageURL
-                            let imageInfo = try? Data(contentsOf: url!)
- 
-                            let newImage = UIImage(data: imageInfo!)
-                        let imageWidth = newImage?.size.width ?? 100
-                            let imageHeight = newImage?.size.height ?? 100
-
-                        DispatchQueue.main.async {
-                            
-                            if let attributedString = providor {
-                                let imageRatio = Double(imageHeight / imageWidth)
-                                placeHolderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
-                                    self?.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
-                                })
+                        if let imageInfo = try? Data(contentsOf: url!) {
+                            if let newImage = UIImage(data: imageInfo) {
+                                
+                                DispatchQueue.main.async {
+                                    
+                                    if let attributedString = providor {
+                                        let imageRatio = Double(newImage.size.height / newImage.size.width)
+                                        placeHolderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
+                                            self?.imageInfo.insert(ImageInfo(imageUrl: attributedString.absoluteString, imageRatio: imageRatio), at: insertionIndexPath.item)
+                                        })
+                                    }
+                                }
                             } else {
-                                placeHolderContext.deletePlaceholder()
+                                DispatchQueue.main.async {
+                                    placeHolderContext.deletePlaceholder()
+                                }
+    
+                            
                             }
                         }
-                        
+   
                     }
                     
                     
