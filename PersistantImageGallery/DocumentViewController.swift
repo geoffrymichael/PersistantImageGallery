@@ -15,6 +15,24 @@ import UIKit
 class DocumentViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDragDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDropDelegate {
     
     
+    //Var and function to keep track of a notification warning when erroneous data is trying to be dragged in
+    private var supressBadURLWarnings = false
+    
+    private func presentBadURLWarning(for url: URL?) {
+        if !supressBadURLWarnings {
+            let alert = UIAlertController(title: "Image Transfer Failed", message: "Could not transfer dropped image from its source. \nKeep showing this warning in the future?", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Keep Warning", style: .default))
+            
+            alert.addAction(UIAlertAction(title: "Stop Wanring", style: .destructive, handler: { action in
+                self.supressBadURLWarnings = true
+            }))
+            
+            present(alert, animated: true)
+        }
+        
+        
+    }
  
     //MARK: Drop Coordinator
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
@@ -48,6 +66,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                                     }
                                 }
                             } else {
+                                self?.presentBadURLWarning(for: url)
                                 DispatchQueue.main.async {
                                     placeHolderContext.deletePlaceholder()
                                 }
@@ -60,8 +79,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                     
                     
                 }
-//                imageInfo.append(ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: 400))
-//                collectionView.reloadData()
+
             }
             
 
@@ -73,11 +91,28 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     var document: Document?
     
-    //TODO: Need to configure to save and load using document browser. May want to rethink my model?
     
-    //A function to save a gallery as json data to disk. For now I am trying to keep our single custom class object beceause I belive I need to for it to remain draggable. So I have saved the actual array into a codable struct in our class. Not sure if this normal procedure, but it seems to be working. Not sure if this will cause trouble when using actual document browser. 
+    //A function to save a gallery as json data to disk. For now I am trying to keep our single custom class object beceause I belive I need to for it to remain draggable. So I have saved the actual array into a codable struct in our class. Not sure if this normal procedure, but it seems to be working. Not sure if this will cause trouble when using actual document browser.
     
     var saveArray = [ImageInfo.GalleryInfo]()
+    
+    func save() {
+    
+        for image in imageInfo {
+            saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
+        }
+        
+        document?.imageInfoArray = saveArray
+        
+        if document?.imageInfoArray != nil {
+            document?.updateChangeCount(.done)
+        }
+        
+        
+        
+    }
+    
+    
     
     var thumbnail: UIImage?
     
@@ -93,22 +128,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     
     
-    func save() {
-  
-
-        for image in imageInfo {
-            saveArray.append(ImageInfo.GalleryInfo(imageUrl: image.imageUrl, imageRatio: image.imageRatio))
-        }
-        
-        document?.imageInfoArray = saveArray
-        
-        if document?.imageInfoArray != nil {
-            document?.updateChangeCount(.done)
-        }
-
-
-        
-    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -132,10 +152,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                     
                 })
                 
-                
-                
-                
-                
+   
                 
             } else {
                 print("did not work")
@@ -144,41 +161,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         })
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
-//        document?.open(completionHandler: { success in
-//            if success {
-//
-//                self.title = self.document?.localizedName
-//
-//
-//                    self.collectionView.performBatchUpdates({
-//
-//                        if let imageOpen = self.document?.imageInfoArray {
-//                            for image in imageOpen {
-//                                let indexPath = IndexPath(row: self.imageInfo.count, section: 0)
-//                                self.imageInfo.append(ImageInfo(imageUrl: image.imageUrl ?? "https://upload.wikimedia.org/wikipedia/commons/b/b2/Cassini_Saturn_Orbit_Insertion.jpg", imageRatio: image.imageRatio ?? 1))
-//                                self.collectionView.insertItems(at: [indexPath])
-//
-//                            }
-//                        }
-//
-//                    })
-//
-//
-//
-//
-//
-//
-//            } else {
-//                print("did not work")
-//            }
-//
-//        })
-        
-
-    }
+   
     
     //Creating a dragItem from our ImageInfo class
     private func dragItems(at indexPath: IndexPath) -> [UIDragItem] {
@@ -191,11 +174,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
     }
 
-    
 
-
-    
-    
     //100 width constant. And aspect ratio determined from raw image size.
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 //        return CGSize(width: 200, height: 200)
@@ -216,6 +195,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
       
     
+    //TODO: Various local variables that I have been messing with to try and store view controller data. Some of these are deprecated.
     
     var image: UIImage?
     
@@ -234,9 +214,11 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
    
     
-    
+    //MARK: Maine local storage array to hold instances of our mdoel.
     var imageInfo = [ImageInfo]()
     
+    
+    //MARK: Main collection view drag and drop config functions
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: ImageInfo.self)
     }
@@ -247,18 +229,13 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCollectionViewCell
-        
-
-        
+  
         if imageURLs.count > indexPath.item {
 
             cell.imageInfo = imageInfo[indexPath.item]
         }
         
-//        cell.imageInfo = ImageInfo(imageUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e1/FullMoon2010.jpg", imageRatio: 100)
-        
-//        cell.imageURL = imageURLs[2]
-        
+
         
         return cell
     }
