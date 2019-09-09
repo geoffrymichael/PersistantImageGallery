@@ -66,8 +66,9 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
                                     }
                                 }
                             } else {
-                                self?.presentBadURLWarning(for: url)
+                                
                                 DispatchQueue.main.async {
+                                    self?.presentBadURLWarning(for: url)
                                     placeHolderContext.deletePlaceholder()
                                 }
     
