@@ -24,7 +24,7 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
             
             alert.addAction(UIAlertAction(title: "Keep Warning", style: .default))
             
-            alert.addAction(UIAlertAction(title: "Stop Wanring", style: .destructive, handler: { action in
+            alert.addAction(UIAlertAction(title: "Stop Warning", style: .destructive, handler: { action in
                 self.supressBadURLWarnings = true
             }))
             
@@ -230,9 +230,11 @@ class DocumentViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "imageCell", for: indexPath) as! ImageCollectionViewCell
-  
+        
+        cell.image = nil
+        
         if imageURLs.count > indexPath.item {
-
+//            cell.imageInfo = nil
             cell.imageInfo = imageInfo[indexPath.item]
         }
         
